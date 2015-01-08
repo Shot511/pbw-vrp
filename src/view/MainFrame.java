@@ -31,8 +31,10 @@ public class MainFrame extends JFrame
 	private JButton generatePointsBtn;
 	private JButton startCalculationsBtn;
 	private JLabel numPointsLabel;
+	private JLabel numBoxesPerStoreLabel;
 	private JLabel algOptionsLabel;
 	private JFormattedTextField numPointsTF;
+	private JFormattedTextField numBoxesPerStoreTF;
 	
 	
 	private MainFrame()
@@ -73,14 +75,21 @@ public class MainFrame extends JFrame
 	    formatter.setCommitsOnValidEdit(true);
 	    
 		numPointsLabel = new JLabel("Points number: ");
+		numBoxesPerStoreLabel = new JLabel("Boxes per store: ");
+		
 		numPointsTF = new JFormattedTextField(formatter);
 		numPointsTF.setColumns(10);
+		
+		numBoxesPerStoreTF = new JFormattedTextField(formatter);
+		numBoxesPerStoreTF.setColumns(10);
+		
 		generatePointsBtn = new JButton("Generate!");
 		algOptionsLabel = new JLabel("<html>Algorithm options:<br><br> other options...<br><br><html>");
 		startCalculationsBtn = new JButton("Start calculations!");
 		
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(2, 2, 2, 2);
+		gbc.insets = new Insets(20, 2, 2, 2);
+		gbc.anchor = GridBagConstraints.NORTH;
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -93,6 +102,7 @@ public class MainFrame extends JFrame
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.gridwidth = 2;
+		gbc.insets = new Insets(2, 2, 2, 2);
 		menuPanel.add(generatePointsBtn, gbc);
 		
 		gbc.gridx = 0;
@@ -102,7 +112,18 @@ public class MainFrame extends JFrame
 		
 		gbc.gridx = 0;
 		gbc.gridy = 3;
+		gbc.gridwidth = 1;
 		gbc.insets = new Insets(2, 2, 2, 2);
+		menuPanel.add(numBoxesPerStoreLabel, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 3;
+		menuPanel.add(numBoxesPerStoreTF, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		gbc.weighty = 1;
+		gbc.gridwidth = 2;
 		menuPanel.add(startCalculationsBtn, gbc);
 		/* End Menu Panel */
 		

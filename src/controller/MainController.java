@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import view.AboutFrame;
 import view.MainFrame;
 
 /* Uses singleton pattern */
@@ -41,10 +42,7 @@ public class MainController
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFrame frame = new JFrame("About");
-				frame.setSize(200, 200);
-				frame.setVisible(true);
-				
+				AboutFrame frame = new AboutFrame();
 			}
 		});
 	}
