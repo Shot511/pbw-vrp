@@ -25,7 +25,10 @@ public class MainController
 			@Override
 			public void actionPerformed(ActionEvent e) 
 			{
-				mainFrame.getMapPanel().generateNodes(mainFrame.getNumPoints(), 2*nodeSize);
+				if(mainFrame.getNumPoints() > 0 && mainFrame.getNumPoints() < 201)
+					mainFrame.getMapPanel().generateNodes(mainFrame.getNumPoints(), 2*nodeSize);
+				else
+					JOptionPane.showMessageDialog(mainFrame.getPanel(), "Number of points must be greater than 0 and lower than 200!");
 			}
 		});
 		
@@ -34,7 +37,8 @@ public class MainController
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				JOptionPane.showMessageDialog(mainFrame.getPanel(), "Starting calculations!");
+				mainFrame.getMapPanel().generateSomeLines();
+				//JOptionPane.showMessageDialog(mainFrame.getPanel(), "Starting calculations!");
 			}
 		});
 		
