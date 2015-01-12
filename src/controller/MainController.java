@@ -3,7 +3,6 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import view.AboutFrame;
@@ -20,12 +19,13 @@ public class MainController
 	{
 		mainFrame = MainFrame.INSTANCE;
 		
+		int nodeSize = mainFrame.getMapPanel().getNodeSize();
 		mainFrame.addGeneratePointsListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) 
 			{
-				JOptionPane.showMessageDialog(mainFrame.getPanel(), "Generating points!");
+				mainFrame.getMapPanel().generateNodes(mainFrame.getNumPoints(), 2*nodeSize);
 			}
 		});
 		
@@ -42,7 +42,7 @@ public class MainController
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AboutFrame frame = new AboutFrame();
+				new AboutFrame();
 			}
 		});
 	}

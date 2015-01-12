@@ -44,6 +44,7 @@ public class MainFrame extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		prepareUI();
 		setVisible(true);
+		setResizable(false);
 	}
 	
 	private void prepareUI()
@@ -79,9 +80,11 @@ public class MainFrame extends JFrame
 		
 		numPointsTF = new JFormattedTextField(formatter);
 		numPointsTF.setColumns(10);
+		numPointsTF.setValue(50);
 		
 		numBoxesPerStoreTF = new JFormattedTextField(formatter);
 		numBoxesPerStoreTF.setColumns(10);
+		numBoxesPerStoreTF.setValue(10);
 		
 		generatePointsBtn = new JButton("Generate!");
 		algOptionsLabel = new JLabel("<html>Algorithm options:<br><br> other options...<br><br><html>");
@@ -150,6 +153,23 @@ public class MainFrame extends JFrame
 	public JPanel getPanel()
 	{
 		return panel;
+	}
+	
+	public MapPanel getMapPanel()
+	{
+		return mapPanel;
+	}
+	
+	public int getNumPoints() 
+	{
+		int numPoints = 0;
+		
+		if(numPointsTF.isEditValid())
+		{
+			numPoints = (int)numPointsTF.getValue();
+		}
+		
+		return numPoints;
 	}
 	
 }
