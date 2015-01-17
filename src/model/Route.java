@@ -1,14 +1,17 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Route {
 
-	private int id = 1;
+	private int id;
+	private int score;
 	private int currentBoxLoad = 54;
 	private int currentWorktime = 0;
 	private int maxBoxLoad = 54;
 	private int maxWorktime = 24;
+	private double TRUCK_VELOCITY = 50;
 	private Depot depot;
 	ArrayList<Node> nodesOnRoute;
 	
@@ -44,10 +47,17 @@ public class Route {
 		
 		int bestPositionIndex = getBestRoutePositionIndex(n);
 		nodesOnRoute.add(bestPositionIndex, n);
-		if(!isRoutePossible(n, boxesToDeliver)) {
-			nodesOnRoute.remove(bestPositionIndex);
-			return false;
+		
+		
+		if(!addToRoute(n, boxesToDeliver)) {
+			Collections.reverse(nodesOnRoute);
+			if(!addToRoute(n, boxesToDeliver)) {
+				Collections.reverse(nodesOnRoute);
+				nodesOnRoute.remove(bestPositionIndex);
+				return false;
+			}
 		}
+		
 		return true;
 	}
 
@@ -59,21 +69,45 @@ public class Route {
 			on this node has to be settled so that the other route have time to serve it (consider the number of boxes
 			left to be delivered)
 	*/
-	private boolean isRoutePossible(Node newNode, int boxesToDeliver) {
-		ArrayList<Node> nodesInOrder = new ArrayList<Node>(nodesOnRoute.size()+1);
+	private boolean addToRoute(Node newNode, int boxesToDeliver) {
+		ArrayList<Integer> startTimes = new ArrayList<Integer>(nodesOnRoute.size());
 		
 		int minTime = nodesOnRoute.get(1).getHourStart();
+		//check if route with such nodes is doable
+		for(int i=1; i<nodesOnRoute.size()-1; i++) {
+			Node n = nodesOnRoute.get(i);
+			if(n.equals(newNode)) {
+				minTime = n.getMinPossibleFinishTimeAfter(id, minTime, boxesToDeliver);
+				startTimes.set(i, minTime-n.getServiceTime()*boxesToDeliver);
+			} else {
+				minTime = n.getMinPossibleFinishTimeAfter(id, minTime, n.getBoxesNoDeliveredByThisTruck(id));
+				startTimes.set(i, minTime-n.getServiceTime()*n.getBoxesNoDeliveredByThisTruck(id));
+			}
+			if(minTime==-500)
+				return false;
+			//time to get to next node
+			minTime += getNodesDistance(n, nodesOnRoute.get(i+1))/TRUCK_VELOCITY;
+		}
+		startTimes.set(0, (int) (startTimes.get(1)-getNodesDistance(nodesOnRoute.get(0),nodesOnRoute.get(1))/TRUCK_VELOCITY));
+		if(minTime-startTimes.get(0)>maxWorktime*60)
+			return false;
+		
+		//route is doable - update nodes
+		int score = 0;
 		for(int i=1; i<nodesOnRoute.size()-1; i++) {
 			Node n = nodesOnRoute.get(i);
 			if(n.equals(newNode))
-				minTime = n.getMinPossibleFinishTimeAfter(id, minTime, boxesToDeliver);
+				n.addRoute(id, startTimes.get(i), boxesToDeliver);
 			else
-				minTime = n.getMinPossibleFinishTimeAfter(id, minTime, n.getBoxesNoDeliveredByThisTruck(id));
+				n.addRoute(id, startTimes.get(i), n.getBoxesNoDeliveredByThisTruck(id));
+			
+			score += getNodesDistance(n, nodesOnRoute.get(i+1));
 		}
-		
+		this.currentBoxLoad -= boxesToDeliver;
+		this.score = score;
 		return true;
 	}
-	
+
 	//that works
 	private int getBestRoutePositionIndex(Node n) {
 		//find closest node in this route
@@ -100,6 +134,10 @@ public class Route {
 	
 	private double getNodesDistance(Node n1, Node n2) {
 		return Math.sqrt(Math.pow(n1.getPositionX() - n2.getPositionX(), 2) + Math.pow(n1.getPositionY() - n2.getPositionY(), 2));
+	}
+	
+	public int getScore() {
+		return score;
 	}
 	
 }

@@ -56,15 +56,17 @@ public class Solution {
 					newRoute.addNode(n);
 					routesInSolution.add(newRoute);
 					nodesBank.remove(n);
-					System.out.println("was not addable! - count " + count);
+					System.out.println("Node was not addable to any route! Creating new route...");
 				}
 			}
 		}
 	}
-
 	
 	public double getScore() {
-		return 0;
+		double score = 0;
+		for(int i=0; i<routesInSolution.size(); i++)
+			score += routesInSolution.get(i).getScore();
+		return score;
 	}
 	
 	public ArrayList<Route> getRoutesInSolution() {
