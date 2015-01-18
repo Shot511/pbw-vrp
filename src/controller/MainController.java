@@ -2,8 +2,11 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
+
+import com.sun.javafx.geom.Point2D;
 
 import view.AboutFrame;
 import view.MainFrame;
@@ -19,7 +22,7 @@ public class MainController
 	{
 		mainFrame = MainFrame.INSTANCE;
 		
-		int nodeSize = mainFrame.getMapPanel().getNodeSize();
+		final int nodeSize = mainFrame.getMapPanel().getNodeSize();
 		mainFrame.addGeneratePointsListener(new ActionListener() {
 			
 			@Override
@@ -37,7 +40,12 @@ public class MainController
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				mainFrame.getMapPanel().generateSomeLines();
+				ArrayList<Point2D> nodes = mainFrame.getMapPanel().getNodes();
+				if(nodes!=null) {
+					AlgorithmController ac = new AlgorithmController(nodes);
+					//mainFrame.getMapPanel().generateSomeLines();
+					mainFrame.getMapPanel().generateSolutionLines(ac.getBestSolution());
+				}
 				//JOptionPane.showMessageDialog(mainFrame.getPanel(), "Starting calculations!");
 			}
 		});

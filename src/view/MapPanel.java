@@ -17,6 +17,10 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import model.Node;
+import model.Route;
+import model.Solution;
+
 import com.sun.javafx.geom.Point2D;
 
 public class MapPanel extends JPanel 
@@ -75,6 +79,30 @@ public class MapPanel extends JPanel
 			
 			repaint();
 		}
+	}
+	
+	public void generateSolutionLines(Solution solution)
+	{
+		if(lines != null)
+			lines.clear();
+		else
+			lines = new ArrayList<NodeConnection>();
+		
+		ArrayList<Route> routes = solution.getRoutesInSolution();
+		for(int i=0; i<routes.size(); i++) {	//for(int i=0; i<5; i++) {
+			ArrayList<Node> nodesInRoute = routes.get(i).getNodesOnRoute();
+			int carID = routes.get(i).getId();
+			for(int j=0; j<nodesInRoute.size()-1; j++) {
+				Node n1 = nodesInRoute.get(j);
+				Node n2 = nodesInRoute.get(j+1);
+				Point2D p1 = new Point2D(n1.getPositionX(),n1.getPositionY());
+				Point2D p2 = new Point2D(n2.getPositionX(),n2.getPositionY());
+				NodeConnection nc = new NodeConnection(p1, p2, carID);
+				lines.add(nc);
+			}
+		}
+			
+		repaint();
 	}
 
 	public void paintComponent(Graphics g)
