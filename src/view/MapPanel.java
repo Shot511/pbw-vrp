@@ -135,7 +135,7 @@ public class MapPanel extends JPanel
 	        	g2.setColor(hsvColor.hsv2rgb());
 	        	
 	        	if(lines.get(i).isAlreadyTheSameLine(lines, i))
-	        		g2.setStroke(new BasicStroke(1.2f));
+	        		g2.setStroke(new BasicStroke(0.85f));
 	        	
 	        	g2.draw(new Line2D.Float(lines.get(i).getStart().x, 
 	        							 lines.get(i).getStart().y,
