@@ -1,5 +1,7 @@
 package helpers;
 
+import java.util.ArrayList;
+
 import com.sun.javafx.geom.Point2D;
 
 public class NodeConnection 
@@ -28,6 +30,19 @@ public class NodeConnection
 	public int getCarID() 
 	{
 		return carID;
+	}
+	
+	public boolean isAlreadyTheSameLine(ArrayList<NodeConnection> list, int j)
+	{
+		for(int i = 0; i < list.size(); ++i)
+		{
+			if (i == j || list.get(i).getCarID() == carID)
+				return false;
+			
+			if(list.get(i).getStart().x == start.x && list.get(i).getStart().y == start.y && list.get(i).getEnd().x == end.x && list.get(i).getEnd().y == end.y)
+				return true;
+		}
+		return false;
 	}
 	
 }

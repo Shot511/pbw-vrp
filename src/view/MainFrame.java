@@ -80,7 +80,7 @@ public class MainFrame extends JFrame
 		
 		numPointsTF = new JFormattedTextField(formatter);
 		numPointsTF.setColumns(10);
-		numPointsTF.setValue(50);
+		numPointsTF.setValue(30);
 		
 		numBoxesPerStoreTF = new JFormattedTextField(formatter);
 		numBoxesPerStoreTF.setColumns(10);

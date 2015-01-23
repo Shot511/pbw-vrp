@@ -3,9 +3,11 @@ package view;
 import helpers.NodeConnection;
 import helpers.PoissonDisk;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Ellipse2D.Double;
@@ -110,20 +112,11 @@ public class MapPanel extends JPanel
 		super.paintComponent(g);
 		
 		Graphics2D g2 = (Graphics2D) g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
         if(image != null)
         {
             g2.drawImage(image, 0, 0, this);
-        }
-        
-        if(nodes != null)
-        {
-	        g2.setColor(Color.RED);
-	        g2.fill(new Ellipse2D.Double((int)nodes.get(0).x-nodeSize/2, (int)nodes.get(0).y-nodeSize/2, nodeSize, nodeSize));
-	        
-	        g2.setColor(Color.BLUE);
-	        for(int i = 1; i < nodes.size(); ++i)
-	        	g2.fill(new Ellipse2D.Double((int)nodes.get(i).x-nodeSize/2, (int)nodes.get(i).y-nodeSize/2, nodeSize, nodeSize)); 	
         }
         
         if(lines != null)
@@ -134,16 +127,33 @@ public class MapPanel extends JPanel
         	
 	        for(int i = 0; i < lines.size(); ++i)
 	        {
+	        	g2.setStroke(new BasicStroke(2));
 	        	double PHI = (1.0 + Math.sqrt(5.0))/2.0;
 	        	double n = lines.get(i).getCarID() * PHI - Math.floor(lines.get(i).getCarID() * PHI);
 	        	hsvColor.h = Math.floor(n * 360);
 	        	
 	        	g2.setColor(hsvColor.hsv2rgb());
+	        	
+	        	if(lines.get(i).isAlreadyTheSameLine(lines, i))
+	        		g2.setStroke(new BasicStroke(1.2f));
+	        	
 	        	g2.draw(new Line2D.Float(lines.get(i).getStart().x, 
 	        							 lines.get(i).getStart().y,
 	        							 lines.get(i).getEnd().x,
 	        							 lines.get(i).getEnd().y));
+	        	double theta = Math.atan2(lines.get(i).getEnd().y - lines.get(i).getStart().y, lines.get(i).getEnd().x - lines.get(i).getStart().x);
+	        	drawArrow(g2, theta, (lines.get(i).getStart().x + lines.get(i).getEnd().x)/2, (lines.get(i).getStart().y + lines.get(i).getEnd().y)/2);
 	        }
+        }
+        
+        if(nodes != null)
+        {
+	        g2.setColor(Color.RED);
+	        g2.fill(new Ellipse2D.Double((int)nodes.get(0).x-nodeSize/2, (int)nodes.get(0).y-nodeSize/2, nodeSize, nodeSize));
+	        
+	        g2.setColor(Color.BLUE);
+	        for(int i = 1; i < nodes.size(); ++i)
+	        	g2.fill(new Ellipse2D.Double((int)nodes.get(i).x-nodeSize/2, (int)nodes.get(i).y-nodeSize/2, nodeSize, nodeSize)); 	
         }
 	}
 	
@@ -165,6 +175,21 @@ public class MapPanel extends JPanel
 	public int getNodeSize() {
 		return nodeSize;
 	}
+	
+	private void drawArrow(Graphics2D g2, double theta, double x0, double y0)
+    {
+		int barb = 7;
+		double phi = Math.PI / 6;
+		
+		//g2.setColor(Color.black);
+		
+        double x = x0 - barb * Math.cos(theta + phi);
+        double y = y0 - barb * Math.sin(theta + phi);
+        g2.draw(new Line2D.Double(x0, y0, x, y));
+        x = x0 - barb * Math.cos(theta - phi);
+        y = y0 - barb * Math.sin(theta - phi);
+        g2.draw(new Line2D.Double(x0, y0, x, y));
+    }
 	
 	class HsvColor
 	{
