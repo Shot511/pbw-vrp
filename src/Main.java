@@ -1,7 +1,7 @@
 import java.awt.EventQueue;
 
-import controller.MainController;
 import view.MainFrame;
+import controller.MainController;
 
 
 public class Main 
@@ -17,7 +17,6 @@ public class Main
 				MainController mainController = MainController.INSTANCE;
 			}
 		});
-
-	}
-
+		
+	}	
 }

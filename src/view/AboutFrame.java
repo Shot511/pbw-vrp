@@ -11,7 +11,7 @@ public class AboutFrame extends JFrame
 	public AboutFrame() 
 	{
 		super("About...");
-		setSize(300, 200);
+		setSize(300, 250);
 		setLocation(300, 200);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
@@ -19,8 +19,8 @@ public class AboutFrame extends JFrame
 				+ "				  <h2>About authors</h2>"
 				+ "				  Magdalena Michalik - <i>Programming</i><br>"
 				+ "               Tomasz Ga≥aj - <i>Programming</i><br>"
+				+ "               Jakub Matusiak - <i>Report & Presentation</i><br>"
 				+ "               Micha≥ Michalski - <i>Research & Report</i><br>"
-				//+ "               Jakub Matusiak - <br>"
 				+ "				  Szymon Niedüwiedzki - <i>Research & Report</i>"
 				+ "				  </center></html>");	
 		about.setHorizontalAlignment(JLabel.CENTER);

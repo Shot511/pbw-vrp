@@ -2,6 +2,8 @@ package controller;
 
 import java.util.ArrayList;
 
+import javax.swing.JLabel;
+
 import com.sun.javafx.geom.Point2D;
 
 import model.Depot;
@@ -20,7 +22,7 @@ public class AlgorithmController {
 	private Solution currentSolution;
 	private Solution bestSolution;
 	
-	public AlgorithmController(ArrayList<Point2D> nodes) {
+	public AlgorithmController(ArrayList<Point2D> nodes, JLabel label) {
 		//prepare unchangable list of all nodes and changable estimated number of routes/trucks
 		setNodes(nodes);
 		setMinRoutesNo();
@@ -29,7 +31,8 @@ public class AlgorithmController {
 		currentSolution = new Solution(allNodes);
 		bestSolution = new Solution(currentSolution); //deep copy
 		for(int i=0;i<10000;i++) {
-			System.out.println("iteration "+i);
+			//label.setText("<html><center>Loading...<br>" + (i+1) + "/10000</center></html>");
+			//System.out.println("iteration "+i);
 			currentSolution.modify();
 			if(currentSolution.getScore() < bestSolution.getScore())
 				bestSolution = new Solution(currentSolution);
