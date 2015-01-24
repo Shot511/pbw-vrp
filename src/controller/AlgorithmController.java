@@ -13,7 +13,7 @@ import model.Solution;
 public class AlgorithmController {
 
 	public static int NODES_NO;
-	public static int TRUCK_CAPACITY = 54;
+	public static int TRUCK_CAPACITY = 54; //do GUI sio!
 	
 	public ArrayList<Node> allNodes = new ArrayList<Node>();
 	public static int MIN_ROUTES_NO;
