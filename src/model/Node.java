@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
+import view.MainFrame;
+
 public class Node {
 
 	private int id = 1;
@@ -10,11 +12,11 @@ public class Node {
 	protected int positionY;
 	
 	//do podrasowania. albo nie, nie ma czasu
-	private int hourStart = -60; //23:00       //do GUI sio!
-	private int hourEnd = 6*60; //6:00         //do GUI sio!
+	private int hourStart = MainFrame.INSTANCE.getHourStart(); //-60; //23:00
+	private int hourEnd = MainFrame.INSTANCE.getHourEnd(); //6*60; //6:00
 	                                           
-	private int serviceTime = 4; //in minutes  //do GUI sio!
-	private int boxNoRequest = 15;             //do GUI sio!
+	private int serviceTime = MainFrame.INSTANCE.getServiceTime(); //4; //in minutes
+	private int boxNoRequest = MainFrame.INSTANCE.getBoxesPerStore(); //15;
 	private int boxesDelivered = 0;            
 	
 	private ArrayList<Integer> routeIds;// = new ArrayList<Integer>(); //remember routes which served us

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import javax.swing.JLabel;
 
+import view.MainFrame;
+
 import com.sun.javafx.geom.Point2D;
 
 import model.Depot;
@@ -13,7 +15,7 @@ import model.Solution;
 public class AlgorithmController {
 
 	public static int NODES_NO;
-	public static int TRUCK_CAPACITY = 54; //do GUI sio!
+	public static int TRUCK_CAPACITY;// = 54;
 	
 	public ArrayList<Node> allNodes = new ArrayList<Node>();
 	public static int MIN_ROUTES_NO;
@@ -22,11 +24,14 @@ public class AlgorithmController {
 	private Solution currentSolution;
 	private Solution bestSolution;
 	
-	public AlgorithmController(ArrayList<Point2D> nodes, JLabel label) {
+	public AlgorithmController(ArrayList<Point2D> nodes, JLabel label) 
+	{
+		TRUCK_CAPACITY = MainFrame.INSTANCE.getTruckCapacity();
+		
 		//prepare unchangable list of all nodes and changable estimated number of routes/trucks
 		setNodes(nodes);
 		setMinRoutesNo();
-		System.out.println("estimated "+this.MIN_ROUTES_NO+" routes");
+		System.out.println("estimated "+AlgorithmController.MIN_ROUTES_NO+" routes");
 		
 		currentSolution = new Solution(allNodes);
 		bestSolution = new Solution(currentSolution); //deep copy

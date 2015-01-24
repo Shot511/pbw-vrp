@@ -128,7 +128,7 @@ public class MapPanel extends JPanel
 	        for(int i = 0; i < lines.size(); ++i)
 	        {
 	        	g2.setStroke(new BasicStroke(2));
-	        	double PHI = (1.0 + Math.sqrt(5.0))/2.0;
+	        	double PHI = (3.0 + Math.sqrt(5.0))/2.0;
 	        	double n = lines.get(i).getCarID() * PHI - Math.floor(lines.get(i).getCarID() * PHI);
 	        	hsvColor.h = Math.floor(n * 360);
 	        	
