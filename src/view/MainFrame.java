@@ -56,7 +56,7 @@ public class MainFrame extends JFrame
 	private MainFrame()
 	{
 		super("Vehicle Routing Problem - Split Delievery - PBW 2014/2015");
-		setSize(804, 700);
+		setSize(824, 700);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		prepareUI();
 		setVisible(true);
@@ -107,10 +107,10 @@ public class MainFrame extends JFrame
 		serviceTimeLabel = new JLabel("Service time (min): ");
 		truckCapacityLabel = new JLabel("Truck capacity: ");
 		statisticsLabel = new JLabel("<html><center><h3><u>Statistics</u></h3></center><html>");
-		stat1Label = new JLabel("Stat1: ");;
-		stat2Label = new JLabel("Stat2: ");;
-		stat3Label = new JLabel("Stat3: ");;
-		stat4Label = new JLabel("Stat4: ");;
+		stat1Label = new JLabel("No. of routes: ");;
+		stat2Label = new JLabel("Total distance: ");;
+		stat3Label = new JLabel("Avg. truck fill: ");;
+		stat4Label = new JLabel("Avg. no. of stores per truck: ");;
 		
 		numPointsTF = new JFormattedTextField(formatter0_MX_INT);
 		numPointsTF.setColumns(5);
