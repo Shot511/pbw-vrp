@@ -1,3 +1,5 @@
+import helpers.Log;
+
 import java.awt.EventQueue;
 
 import view.MainFrame;
@@ -13,6 +15,7 @@ public class Main
 			
 			@Override
 			public void run() {
+				Log.init();
 				MainFrame main = MainFrame.INSTANCE;
 				MainController mainController = MainController.INSTANCE;
 			}

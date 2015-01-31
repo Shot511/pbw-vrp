@@ -60,6 +60,7 @@ public class Solution {
 				}
 			}
 		}
+		removeEmptyRoutes();
 	}
 	
 	//in progress
@@ -110,17 +111,42 @@ public class Solution {
 			if(n.isCovered())
 				nodesToRemove.remove(n);
 		}
+		removeEmptyRoutes();
 	}
 	
-	public double getScore() {
+	public void removeEmptyRoutes() {
+		for(int i=0; i<routesInSolution.size(); i++)
+			if(routesInSolution.get(i).getNodesNumber() == 2)
+				routesInSolution.remove(i);
+	}
+	
+	public int getScore() {
 		double score = 0;
 		for(int i=0; i<routesInSolution.size(); i++)
 			score += routesInSolution.get(i).getScore();
-		return score;
+		return (int) score;
 	}
 	
 	public ArrayList<Route> getRoutesInSolution() {
 		return routesInSolution;
+	}
+	
+	public int getRoutesNumber() {
+		return routesInSolution.size();
+	}
+	
+	public int getAvgNodesInRoute() {
+		int sum = 0;
+		for(int i=0; i<routesInSolution.size(); i++)
+			sum += routesInSolution.get(i).getNodesNumber()-2;
+		return Math.round(1f*sum/routesInSolution.size());
+	}
+	
+	public int getAvgTruckLoad() {
+		int sum = 0;
+		for(int i=0; i<routesInSolution.size(); i++)
+			sum += routesInSolution.get(i).getFinalTruckLoad();
+		return Math.round(1f*sum/routesInSolution.size());
 	}
 
 }

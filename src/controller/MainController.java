@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
+import model.Solution;
+
 import view.AboutFrame;
 import view.MainFrame;
 
@@ -53,7 +55,7 @@ public class MainController
 			    dialog.setLocationRelativeTo(mainFrame);
 			    
 			    ImageIcon loading = new ImageIcon("img/ajax-loader.gif");	
-			    JLabel l = new JLabel("<html><h2>Loading...</h2></html>", loading, JLabel.CENTER);
+			    final JLabel l = new JLabel("<html><h2>Loading...</h2></html>", loading, JLabel.CENTER);
 			    l.setForeground(Color.black);
 			    dialog.add(l);
 			    dialog.setUndecorated(true);
@@ -71,7 +73,9 @@ public class MainController
 						if(nodes!=null) 
 						{
 							AlgorithmController ac = new AlgorithmController(nodes, l);
-							mainFrame.getMapPanel().generateSolutionLines(ac.getBestSolution());
+							Solution best = ac.getBestSolution();
+							mainFrame.getMapPanel().generateSolutionLines(best);
+							mainFrame.setStatsText(best.getRoutesNumber(), best.getScore(), best.getAvgTruckLoad(), best.getAvgNodesInRoute());
 							return "Done";
 						}
 						return null;

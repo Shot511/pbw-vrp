@@ -3,17 +3,20 @@ package model;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import view.MainFrame;
+
 import controller.AlgorithmController;
 
 public class Route {
 
 	private int id;
 	private int score;
-	private int currentBoxLoad = 54;
+	private int currentBoxLoad = MainFrame.INSTANCE.getTruckCapacity();
 	private int currentWorktime = 0;
-	private int maxBoxLoad = 54;
+	private int maxBoxLoad = MainFrame.INSTANCE.getTruckCapacity();
 	private int maxWorktime = 24;
 	private double TRUCK_VELOCITY = 50;
+	private int globalServiceTime = MainFrame.INSTANCE.getServiceTime();
 
 	private Depot depot = AlgorithmController.depot;
 	ArrayList<Node> nodesOnRoute = new ArrayList<Node>();
@@ -146,28 +149,45 @@ public class Route {
 		return true;
 	}
 
-	//that works
+	//that works - just kiddin, it doesn't
+//	private int getBestRoutePositionIndex(Node n) {
+//		//find closest node in this route
+//		double minDistance = getNodesDistance(n, nodesOnRoute.get(0));
+//		int index = 0;
+//		for(int i=1; i<nodesOnRoute.size()-1; i++) {
+//			double currentDistance = getNodesDistance(n, nodesOnRoute.get(i));
+//			if(currentDistance<minDistance) {
+//				minDistance = currentDistance;
+//				index = i;
+//			}
+//		}
+//		
+//		//check if it's better to put new node between closest-1 and closest or closest and closest+1
+//		int indexBefore = index-1;
+//		int indexAfter = index+1;
+//		if(index==0) indexBefore = nodesOnRoute.size()-2;
+//		if(minDistance+getNodesDistance(n, nodesOnRoute.get(indexBefore))-getNodesDistance(nodesOnRoute.get(indexBefore), nodesOnRoute.get(index))
+//				<minDistance+getNodesDistance(n, nodesOnRoute.get(indexAfter))-getNodesDistance(nodesOnRoute.get(indexAfter), nodesOnRoute.get(index)))
+//			return indexBefore+1; //covers depot case
+//		else
+//			return indexAfter;
+//	}
+
 	private int getBestRoutePositionIndex(Node n) {
-		//find closest node in this route
-		double minDistance = getNodesDistance(n, nodesOnRoute.get(0));
-		int index = 0;
+		double minDeltaDistance = getNodesDistance(n, nodesOnRoute.get(0))
+				+getNodesDistance(n, nodesOnRoute.get(1))
+				-getNodesDistance(nodesOnRoute.get(0), nodesOnRoute.get(1));
+		int index = 1;
 		for(int i=1; i<nodesOnRoute.size()-1; i++) {
-			double currentDistance = getNodesDistance(n, nodesOnRoute.get(i));
-			if(currentDistance<minDistance) {
-				minDistance = currentDistance;
-				index = i;
+			double currentDeltaDistance = getNodesDistance(n, nodesOnRoute.get(i))
+					+ getNodesDistance(n, nodesOnRoute.get(i+1))
+					- getNodesDistance(nodesOnRoute.get(i), nodesOnRoute.get(i+1));
+			if(currentDeltaDistance<minDeltaDistance) {
+				minDeltaDistance = currentDeltaDistance;
+				index = i+1;
 			}
 		}
-		
-		//check if it's better to put new node between closest-1 and closest or closest and closest+1
-		int indexBefore = index-1;
-		int indexAfter = index+1;
-		if(index==0) indexBefore = nodesOnRoute.size()-2;
-		if(minDistance+getNodesDistance(n, nodesOnRoute.get(indexBefore))-getNodesDistance(nodesOnRoute.get(indexBefore), nodesOnRoute.get(index))
-				<minDistance+getNodesDistance(n, nodesOnRoute.get(indexAfter))-getNodesDistance(nodesOnRoute.get(indexAfter), nodesOnRoute.get(index)))
-			return indexBefore+1; //covers depot case
-		else
-			return indexAfter;
+		return index;
 	}
 	
 	public int getScoreDeltaAfterAdding(Node n) {
@@ -191,8 +211,70 @@ public class Route {
 		return nodesOnRoute;
 	}
 	
+	public int getNodesNumber() {
+		return nodesOnRoute.size();
+	}
+	
 	public int getId() {
 		return id;
+	}
+	
+	public int getFinalTruckLoad() {
+		return maxBoxLoad-currentBoxLoad;
+	}
+	
+	public ArrayList<Integer> getStartHours() {
+		ArrayList<Integer> hours = new ArrayList<Integer>();
+		for(int i=0; i<startTimes.size(); i++) {
+			if(startTimes.get(i)<0)
+				hours.add(24+(startTimes.get(i)-59)/60);
+			else
+				hours.add(startTimes.get(i)/60);
+		}
+		return hours;//startTimes;
+	}
+	
+	public ArrayList<Integer> getStartMins() {
+		ArrayList<Integer> mins = new ArrayList<Integer>();
+		for(int i=0; i<startTimes.size(); i++) {
+			if(startTimes.get(i)<0)
+				mins.add(startTimes.get(i)%60==0? startTimes.get(i)%60 : 60+startTimes.get(i)%60);
+			else
+				mins.add(startTimes.get(i)%60);
+		}
+		return mins;
+	}
+	
+	public ArrayList<Integer> getEndHours() {
+		ArrayList<Integer> hours = new ArrayList<Integer>();
+		ArrayList<Integer> endTimes = new ArrayList<Integer>();
+		for(int i=0; i<startTimes.size(); i++)
+			endTimes.add(startTimes.get(i)+globalServiceTime*boxesDelivered.get(i));
+		for(int i=0; i<endTimes.size(); i++) {
+			if(endTimes.get(i)<0)
+				hours.add(24+(endTimes.get(i)-59)/60);
+			else
+				hours.add(endTimes.get(i)/60);
+		}
+		return hours;//startTimes;
+	}
+	
+	public ArrayList<Integer> getEndMins() {
+		ArrayList<Integer> mins = new ArrayList<Integer>();
+		ArrayList<Integer> endTimes = new ArrayList<Integer>();
+		for(int i=0; i<startTimes.size(); i++)
+			endTimes.add(startTimes.get(i)+globalServiceTime*boxesDelivered.get(i));
+		for(int i=0; i<endTimes.size(); i++) {
+			if(endTimes.get(i)<0)
+				mins.add(endTimes.get(i)%60==0? endTimes.get(i)%60 : 60+endTimes.get(i)%60);
+			else
+				mins.add(endTimes.get(i)%60);
+		}
+		return mins;
+	}
+
+	public ArrayList<Integer> getBoxesDelivered() {
+		return boxesDelivered;
 	}
 	
 }

@@ -66,6 +66,7 @@ public class PoissonDisk
 		
 		float dotAMAB = dot(AM, AB);
 		float dotAMAD = dot(AM, AD);
+		if(M.y>0.55*M.x+(mapHeight*3/5)) return false;
 		
 		return (0 < dotAMAB && dotAMAB < dot(AB, AB)) &&
 			   (0 < dotAMAD && dotAMAD < dot(AD, AD));

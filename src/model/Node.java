@@ -79,11 +79,11 @@ public class Node {
 	
 	//do not touch, it probably works
 	public int getMinPossibleFinishTimeAfter(int routeId, int earliestStartTime, int boxesToDeliver) {
+		if(earliestStartTime<hourStart)
+			earliestStartTime = hourStart;
 		int earliestEndTime = earliestStartTime+serviceTime*boxesToDeliver;
 		if(earliestEndTime>hourEnd)
 			return -500; //or other random code meaning failure (it's not C#, can't return null :P )
-		if(earliestStartTime<hourStart)
-			earliestStartTime = hourStart;
 		
 		//if it's the first route in this node (done)
 		if(routeIds.size()==0 || (routeIds.size()==1 && routeIds.get(0) == routeId)) {

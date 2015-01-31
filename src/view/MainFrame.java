@@ -103,7 +103,7 @@ public class MainFrame extends JFrame
 		numPointsLabel = new JLabel("Points number: ");
 		numBoxesPerStoreLabel = new JLabel("Boxes per store: ");
 		hourStartLabel = new JLabel("Start hour: ");
-		hourEndLabel = new JLabel("Start end: ");
+		hourEndLabel = new JLabel("End hour: ");
 		serviceTimeLabel = new JLabel("Service time (min): ");
 		truckCapacityLabel = new JLabel("Truck capacity: ");
 		statisticsLabel = new JLabel("<html><center><h3><u>Statistics</u></h3></center><html>");
@@ -343,12 +343,12 @@ public class MainFrame extends JFrame
 		return retVal;
 	}
 	
-	public void setStatsText(String stat1, String stat2, String stat3, String stat4)
+	public void setStatsText(int stat1, double stat2, int stat3, int stat4)
 	{
-		stat1Label.setText("Stat1: " + stat1);
-		stat2Label.setText("Stat2: " + stat2);
-		stat3Label.setText("Stat3: " + stat3);
-		stat4Label.setText("Stat4: " + stat4);
+		stat1Label.setText("No. of routes: " + stat1);
+		stat2Label.setText("Total distance: " + stat2);
+		stat3Label.setText("Avg. truck fill: " + stat3);
+		stat4Label.setText("Avg. no. of stores per truck: " + stat4);
 	}
 	
 }
