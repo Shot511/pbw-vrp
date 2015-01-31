@@ -6,7 +6,11 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import java.text.Format;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -99,6 +103,17 @@ public class MainFrame extends JFrame
 	    formatterMIN_MX_INT.setMaximum(Integer.MAX_VALUE);
 	    formatterMIN_MX_INT.setCommitsOnValidEdit(true);
 	    
+	    /* Time format */
+	    Calendar c = Calendar.getInstance();
+	    c.set(Calendar.HOUR_OF_DAY, 23);
+	    c.set(Calendar.MINUTE, 0);
+	    
+	    Calendar c2 = Calendar.getInstance();
+	    c2.set(Calendar.HOUR_OF_DAY, 6);
+	    c2.set(Calendar.MINUTE, 0);
+	    
+	    Format timeFormat = new SimpleDateFormat("HH:mm");	    
+	    
 	    algOptionsLabel = new JLabel("<html><center><h3><u>Algorithm options</u></h3></center><html>");
 		numPointsLabel = new JLabel("Points number: ");
 		numBoxesPerStoreLabel = new JLabel("Boxes per store: ");
@@ -120,13 +135,13 @@ public class MainFrame extends JFrame
 		numBoxesPerStoreTF.setColumns(5);
 		numBoxesPerStoreTF.setValue(15);
 		
-		hourStartTF = new JFormattedTextField(formatterMIN_MX_INT);
+		hourStartTF = new JFormattedTextField(timeFormat);
 		hourStartTF.setColumns(5);
-		hourStartTF.setValue(-60);
+		hourStartTF.setValue(c.getTime());
 		
-		hourEndTF = new JFormattedTextField(formatterMIN_MX_INT);
+		hourEndTF = new JFormattedTextField(timeFormat);
 		hourEndTF.setColumns(5);
-		hourEndTF.setValue(6*60);
+		hourEndTF.setValue(c2.getTime());
 		
 		serviceTimeTF = new JFormattedTextField(formatterMIN_MX_INT);
 		serviceTimeTF.setColumns(5);
@@ -289,7 +304,19 @@ public class MainFrame extends JFrame
 		
 		if(hourStartTF.isEditValid())
 		{
-			retVal = (int)hourStartTF.getValue();
+			Calendar c = Calendar.getInstance();
+			c.setTime((Date)hourStartTF.getValue());
+			
+			if(c.get(Calendar.HOUR_OF_DAY) >= 16 && c.get(Calendar.HOUR_OF_DAY) <= 23)
+				retVal = -(24 - c.get(Calendar.HOUR_OF_DAY)) * 60 + c.get(Calendar.MINUTE);
+			else
+			{
+				Calendar c2 = Calendar.getInstance();
+				c2.set(Calendar.HOUR_OF_DAY, 23);
+				c2.set(Calendar.MINUTE, 0);
+				hourStartTF.setValue(c2.getTime());
+				retVal = -60;
+			}
 		}
 		
 		return retVal;
@@ -301,7 +328,19 @@ public class MainFrame extends JFrame
 		
 		if(hourEndTF.isEditValid())
 		{
-			retVal = (int)hourEndTF.getValue();
+			Calendar c = Calendar.getInstance();
+			c.setTime((Date)hourEndTF.getValue());
+
+			if(c.get(Calendar.HOUR_OF_DAY) >= 0 && c.get(Calendar.HOUR_OF_DAY) <= 16)
+				retVal = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE);
+			else
+			{
+				Calendar c2 = Calendar.getInstance();
+				c2.set(Calendar.HOUR_OF_DAY, 6);
+				c2.set(Calendar.MINUTE, 0);
+				hourEndTF.setValue(c2.getTime());
+				retVal = 60*6;
+			}
 		}
 		
 		return retVal;
@@ -343,12 +382,12 @@ public class MainFrame extends JFrame
 		return retVal;
 	}
 	
-	public void setStatsText(int stat1, double stat2, int stat3, int stat4)
+	public void setStatsText(int stat1, double stat2, double stat3, double stat4)
 	{
 		stat1Label.setText("No. of routes: " + stat1);
-		stat2Label.setText("Total distance: " + stat2);
-		stat3Label.setText("Avg. truck fill: " + stat3);
-		stat4Label.setText("Avg. no. of stores per truck: " + stat4);
+		stat2Label.setText("Total distance: " + String.format("%.2f", stat2));
+		stat3Label.setText("Avg. truck fill: " + String.format("%.2f", stat3));
+		stat4Label.setText("Avg. no. of stores per truck: " + String.format("%.2f", stat4));
 	}
 	
 }

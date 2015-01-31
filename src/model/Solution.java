@@ -135,18 +135,18 @@ public class Solution {
 		return routesInSolution.size();
 	}
 	
-	public int getAvgNodesInRoute() {
+	public double getAvgNodesInRoute() {
 		int sum = 0;
 		for(int i=0; i<routesInSolution.size(); i++)
 			sum += routesInSolution.get(i).getNodesNumber()-2;
-		return Math.round(1f*sum/routesInSolution.size());
+		return 1f*sum/routesInSolution.size();
 	}
 	
-	public int getAvgTruckLoad() {
+	public double getAvgTruckLoad() {
 		int sum = 0;
 		for(int i=0; i<routesInSolution.size(); i++)
 			sum += routesInSolution.get(i).getFinalTruckLoad();
-		return Math.round(1f*sum/routesInSolution.size());
+		return 1f*sum/routesInSolution.size();
 	}
 
 }
